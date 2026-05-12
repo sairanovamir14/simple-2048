@@ -5,6 +5,7 @@ void moveLeft()
 {
     bool moved = false;
 
+    // Сдвиг
     for(int k = 0; k < 4; k++)
     {
         for(int i = 0; i < SIZE; i++)
@@ -23,6 +24,7 @@ void moveLeft()
         }
     }
 
+    // Объединение
     for(int i = 0; i < SIZE; i++)
     {
         for(int j = 1; j < SIZE; j++)
@@ -46,6 +48,23 @@ void moveLeft()
         }
     }
 
+    // Повторный сдвиг
+    for(int k = 0; k < 4; k++)
+    {
+        for(int i = 0; i < SIZE; i++)
+        {
+            for(int j = 1; j < SIZE; j++)
+            {
+                if(board[i][j - 1] == 0
+                   && board[i][j] != 0)
+                {
+                    board[i][j - 1] = board[i][j];
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
     if(moved)
     {
         addNumber();
@@ -57,6 +76,7 @@ void moveRight()
 {
     bool moved = false;
 
+    // Сдвиг
     for(int k = 0; k < 4; k++)
     {
         for(int i = 0; i < SIZE; i++)
@@ -75,6 +95,7 @@ void moveRight()
         }
     }
 
+    // Объединение
     for(int i = 0; i < SIZE; i++)
     {
         for(int j = 2; j >= 0; j--)
@@ -98,6 +119,23 @@ void moveRight()
         }
     }
 
+    // Повторный сдвиг
+    for(int k = 0; k < 4; k++)
+    {
+        for(int i = 0; i < SIZE; i++)
+        {
+            for(int j = 2; j >= 0; j--)
+            {
+                if(board[i][j + 1] == 0
+                   && board[i][j] != 0)
+                {
+                    board[i][j + 1] = board[i][j];
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
     if(moved)
     {
         addNumber();
@@ -109,6 +147,7 @@ void moveUp()
 {
     bool moved = false;
 
+    // Сдвиг
     for(int k = 0; k < 4; k++)
     {
         for(int j = 0; j < SIZE; j++)
@@ -127,6 +166,7 @@ void moveUp()
         }
     }
 
+    // Объединение
     for(int j = 0; j < SIZE; j++)
     {
         for(int i = 1; i < SIZE; i++)
@@ -150,6 +190,23 @@ void moveUp()
         }
     }
 
+    // Повторный сдвиг
+    for(int k = 0; k < 4; k++)
+    {
+        for(int j = 0; j < SIZE; j++)
+        {
+            for(int i = 1; i < SIZE; i++)
+            {
+                if(board[i - 1][j] == 0
+                   && board[i][j] != 0)
+                {
+                    board[i - 1][j] = board[i][j];
+                    board[i][j] = 0;
+                }
+            }
+        }
+    }
+
     if(moved)
     {
         addNumber();
@@ -161,6 +218,7 @@ void moveDown()
 {
     bool moved = false;
 
+    // Сдвиг
     for(int k = 0; k < 4; k++)
     {
         for(int j = 0; j < SIZE; j++)
@@ -179,6 +237,7 @@ void moveDown()
         }
     }
 
+    // Объединение
     for(int j = 0; j < SIZE; j++)
     {
         for(int i = 2; i >= 0; i--)
@@ -198,6 +257,23 @@ void moveDown()
                 }
 
                 board[i][j] = 0;
+            }
+        }
+    }
+
+    // Повторный сдвиг
+    for(int k = 0; k < 4; k++)
+    {
+        for(int j = 0; j < SIZE; j++)
+        {
+            for(int i = 2; i >= 0; i--)
+            {
+                if(board[i + 1][j] == 0
+                   && board[i][j] != 0)
+                {
+                    board[i + 1][j] = board[i][j];
+                    board[i][j] = 0;
+                }
             }
         }
     }
