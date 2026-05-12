@@ -12,6 +12,9 @@ const int SIZE = 4;
 
 int board[SIZE][SIZE];
 
+int score = 0;
+int best = 0;
+
 // Добавление числа
 void addNumber()
 {
@@ -30,6 +33,8 @@ void addNumber()
 // Начало игры
 void startGame()
 {
+    score = 0;
+
     for(int i = 0; i < SIZE; i++)
     {
         for(int j = 0; j < SIZE; j++)
@@ -68,6 +73,14 @@ void moveLeft()
                && board[i][j] != 0)
             {
                 board[i][j - 1] *= 2;
+
+                score += board[i][j - 1];
+
+                if(score > best)
+                {
+                    best = score;
+                }
+
                 board[i][j] = 0;
             }
         }
@@ -102,6 +115,14 @@ void moveRight()
                && board[i][j] != 0)
             {
                 board[i][j + 1] *= 2;
+
+                score += board[i][j + 1];
+
+                if(score > best)
+                {
+                    best = score;
+                }
+
                 board[i][j] = 0;
             }
         }
@@ -136,6 +157,14 @@ void moveUp()
                && board[i][j] != 0)
             {
                 board[i - 1][j] *= 2;
+
+                score += board[i - 1][j];
+
+                if(score > best)
+                {
+                    best = score;
+                }
+
                 board[i][j] = 0;
             }
         }
@@ -170,6 +199,14 @@ void moveDown()
                && board[i][j] != 0)
             {
                 board[i + 1][j] *= 2;
+
+                score += board[i + 1][j];
+
+                if(score > best)
+                {
+                    best = score;
+                }
+
                 board[i][j] = 0;
             }
         }
@@ -185,7 +222,7 @@ int main()
     startGame();
 
     sf::RenderWindow window(
-        sf::VideoMode({420, 470}),
+        sf::VideoMode({420, 560}),
         "2048"
     );
 
@@ -198,15 +235,15 @@ int main()
 
     // Кнопка restart
     sf::RectangleShape button(
-        sf::Vector2f(140, 40)
+        sf::Vector2f(140, 45)
     );
 
     button.setPosition(
-        sf::Vector2f(140, 415)
+        sf::Vector2f(20, 20)
     );
 
     button.setFillColor(
-        sf::Color(100, 100, 100)
+        sf::Color(120, 120, 120)
     );
 
     sf::Text buttonText(font);
@@ -220,7 +257,25 @@ int main()
     );
 
     buttonText.setPosition(
-        sf::Vector2f(155, 418)
+        sf::Vector2f(35, 25)
+    );
+
+    // SCORE
+    sf::Text scoreText(font);
+
+    scoreText.setCharacterSize(28);
+
+    scoreText.setFillColor(
+        sf::Color::White
+    );
+
+    // BEST
+    sf::Text bestText(font);
+
+    bestText.setCharacterSize(24);
+
+    bestText.setFillColor(
+        sf::Color::White
     );
 
     while(window.isOpen())
@@ -269,7 +324,7 @@ int main()
                 }
             }
 
-            // Кнопка restart мышкой
+            // Restart мышкой
             if(const auto* mouse =
                event->getIf
                <sf::Event::MouseButtonPressed>())
@@ -277,16 +332,32 @@ int main()
                 int mx = mouse->position.x;
                 int my = mouse->position.y;
 
-                if(mx >= 140 && mx <= 280
-                   && my >= 415 && my <= 455)
+                if(mx >= 20 && mx <= 160
+                   && my >= 20 && my <= 65)
                 {
                     startGame();
                 }
             }
         }
 
+        scoreText.setString(
+            "SCORE: " + to_string(score)
+        );
+
+        bestText.setString(
+            "BEST: " + to_string(best)
+        );
+
+        scoreText.setPosition(
+            sf::Vector2f(190, 15)
+        );
+
+        bestText.setPosition(
+            sf::Vector2f(190, 55)
+        );
+
         window.clear(
-            sf::Color(180, 170, 160)
+            sf::Color(190, 180, 170)
         );
 
         // Поле
@@ -301,7 +372,7 @@ int main()
                 rect.setPosition(
                     sf::Vector2f(
                         10 + j * 100,
-                        10 + i * 100
+                        120 + i * 100
                     )
                 );
 
@@ -329,7 +400,7 @@ int main()
                     text.setPosition(
                         sf::Vector2f(
                             40 + j * 100,
-                            35 + i * 100
+                            145 + i * 100
                         )
                     );
 
@@ -338,9 +409,12 @@ int main()
             }
         }
 
-        // Кнопка
+        // Интерфейс
         window.draw(button);
         window.draw(buttonText);
+
+        window.draw(scoreText);
+        window.draw(bestText);
 
         window.display();
     }
