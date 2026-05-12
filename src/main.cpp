@@ -27,17 +27,17 @@ int main()
         return 0;
     }
 
-    // Кнопка restart
+    // MAIN RESTART BUTTON
     sf::RectangleShape button(
         sf::Vector2f(140, 45)
     );
 
     button.setPosition(
-        sf::Vector2f(20, 20)
+        sf::Vector2f(140, 500)
     );
 
     button.setFillColor(
-        sf::Color(120, 120, 120)
+        sf::Color(130, 130, 130)
     );
 
     sf::Text buttonText(font);
@@ -51,13 +51,13 @@ int main()
     );
 
     buttonText.setPosition(
-        sf::Vector2f(35, 25)
+        sf::Vector2f(155, 505)
     );
 
     // SCORE
     sf::Text scoreText(font);
 
-    scoreText.setCharacterSize(28);
+    scoreText.setCharacterSize(26);
 
     scoreText.setFillColor(
         sf::Color::White
@@ -66,78 +66,127 @@ int main()
     // BEST
     sf::Text bestText(font);
 
-    bestText.setCharacterSize(24);
+    bestText.setCharacterSize(22);
 
     bestText.setFillColor(
         sf::Color::White
     );
 
-    // GAME OVER
-    sf::Text gameOverText(font);
-
-    gameOverText.setString("GAME OVER");
-
-    gameOverText.setCharacterSize(40);
-
-    gameOverText.setFillColor(
-        sf::Color::Red
+    // GAME OVER PANEL
+    sf::RectangleShape gameOverPanel(
+        sf::Vector2f(260, 120)
     );
 
+    gameOverPanel.setPosition(
+        sf::Vector2f(80, 210)
+    );
+
+    gameOverPanel.setFillColor(
+        sf::Color(245, 245, 245)
+    );
+
+    gameOverPanel.setOutlineThickness(5);
+
+    gameOverPanel.setOutlineColor(
+        sf::Color::Black
+    );
+
+    // GAME OVER TEXT
+    sf::Text gameOverText(font);
+
+    gameOverText.setString(
+        "GAME OVER"
+    );
+
+    gameOverText.setCharacterSize(36);
+
+    gameOverText.setFillColor(
+        sf::Color(150, 20, 20)
+    );
+
+    // CENTER GAME OVER TEXT
+    sf::FloatRect gameBounds =
+        gameOverText.getLocalBounds();
+
     gameOverText.setPosition(
-        sf::Vector2f(70, 70)
+        sf::Vector2f(
+            210 - gameBounds.size.x / 2,
+            225
+        )
+    );
+
+    // GAME OVER BUTTON
+    sf::RectangleShape gameOverButton(
+        sf::Vector2f(160, 45)
+    );
+
+    gameOverButton.setPosition(
+        sf::Vector2f(130, 275)
+    );
+
+    gameOverButton.setFillColor(
+        sf::Color(190, 180, 170)
+    );
+
+    // GAME OVER BUTTON TEXT
+    sf::Text gameOverButtonText(font);
+
+    gameOverButtonText.setString(
+        "RESTART"
+    );
+
+    gameOverButtonText.setCharacterSize(28);
+
+    gameOverButtonText.setFillColor(
+        sf::Color::White
+    );
+
+    gameOverButtonText.setPosition(
+        sf::Vector2f(155, 280)
     );
 
     while(window.isOpen())
     {
         while(auto event = window.pollEvent())
         {
-            // Закрытие окна
+            // CLOSE
             if(event->is<sf::Event::Closed>())
             {
                 window.close();
             }
 
-            // Клавиши
+            // KEYBOARD
             if(const auto* key =
                event->getIf<sf::Event::KeyPressed>())
             {
-                if(key->code ==
-                   sf::Keyboard::Key::Left)
+                if(!gameOver)
                 {
-                    if(!gameOver)
+                    if(key->code ==
+                       sf::Keyboard::Key::Left)
                     {
                         moveLeft();
                     }
-                }
 
-                if(key->code ==
-                   sf::Keyboard::Key::Right)
-                {
-                    if(!gameOver)
+                    if(key->code ==
+                       sf::Keyboard::Key::Right)
                     {
                         moveRight();
                     }
-                }
 
-                if(key->code ==
-                   sf::Keyboard::Key::Up)
-                {
-                    if(!gameOver)
+                    if(key->code ==
+                       sf::Keyboard::Key::Up)
                     {
                         moveUp();
                     }
-                }
 
-                if(key->code ==
-                   sf::Keyboard::Key::Down)
-                {
-                    if(!gameOver)
+                    if(key->code ==
+                       sf::Keyboard::Key::Down)
                     {
                         moveDown();
                     }
                 }
 
-                // Restart по R
+                // RESTART WITH R
                 if(key->code ==
                    sf::Keyboard::Key::R)
                 {
@@ -146,14 +195,14 @@ int main()
                     gameOver = false;
                 }
 
-                // Проверка проигрыша
+                // GAME OVER CHECK
                 if(!canMove())
                 {
                     gameOver = true;
                 }
             }
 
-            // Restart мышкой
+            // MOUSE
             if(const auto* mouse =
                event->getIf
                <sf::Event::MouseButtonPressed>())
@@ -161,16 +210,30 @@ int main()
                 int mx = mouse->position.x;
                 int my = mouse->position.y;
 
-                if(mx >= 20 && mx <= 160
-                   && my >= 20 && my <= 65)
+                // MAIN BUTTON
+                if(mx >= 140 && mx <= 280
+                   && my >= 500 && my <= 545)
                 {
                     startGame();
 
                     gameOver = false;
                 }
+
+                // GAME OVER BUTTON
+                if(gameOver)
+                {
+                    if(mx >= 130 && mx <= 290
+                       && my >= 275 && my <= 320)
+                    {
+                        startGame();
+
+                        gameOver = false;
+                    }
+                }
             }
         }
 
+        // SCORE
         scoreText.setString(
             "SCORE: " + to_string(score)
         );
@@ -180,38 +243,39 @@ int main()
         );
 
         scoreText.setPosition(
-            sf::Vector2f(190, 15)
+            sf::Vector2f(140, 20)
         );
 
         bestText.setPosition(
-            sf::Vector2f(190, 55)
+            sf::Vector2f(165, 55)
         );
 
+        // BACKGROUND
         window.clear(
             sf::Color(190, 180, 170)
         );
 
-        // Поле
+        // BOARD
         for(int i = 0; i < SIZE; i++)
         {
             for(int j = 0; j < SIZE; j++)
             {
                 sf::RectangleShape rect(
-                    sf::Vector2f(90, 90)
+                    sf::Vector2f(80, 80)
                 );
 
                 rect.setPosition(
                     sf::Vector2f(
-                        10 + j * 100,
-                        120 + i * 100
+                        35 + j * 90,
+                        120 + i * 90
                     )
                 );
 
                 rect.setFillColor(
-                    sf::Color(220, 220, 220)
+                    sf::Color(205, 205, 205)
                 );
 
-                // Цвета плиток
+                // TILE COLORS
                 if(board[i][j] == 2)
                 {
                     rect.setFillColor(
@@ -291,7 +355,7 @@ int main()
 
                 window.draw(rect);
 
-                // Числа
+                // NUMBERS
                 if(board[i][j] != 0)
                 {
                     sf::Text text(font);
@@ -302,14 +366,30 @@ int main()
 
                     text.setCharacterSize(30);
 
-                    text.setFillColor(
-                        sf::Color::Black
-                    );
+                    if(board[i][j] >= 8)
+                    {
+                        text.setFillColor(
+                            sf::Color::White
+                        );
+                    }
+                    else
+                    {
+                        text.setFillColor(
+                            sf::Color::Black
+                        );
+                    }
+
+                    // CENTER TEXT
+                    sf::FloatRect bounds =
+                        text.getLocalBounds();
 
                     text.setPosition(
                         sf::Vector2f(
-                            40 + j * 100,
-                            145 + i * 100
+                            35 + j * 90 +
+                            40 - bounds.size.x / 2,
+
+                            120 + i * 90 +
+                            18
                         )
                     );
 
@@ -318,17 +398,23 @@ int main()
             }
         }
 
-        // Интерфейс
+        // DRAW UI
         window.draw(button);
         window.draw(buttonText);
 
         window.draw(scoreText);
         window.draw(bestText);
 
-        // GAME OVER
+        // GAME OVER WINDOW
         if(gameOver)
         {
+            window.draw(gameOverPanel);
+
             window.draw(gameOverText);
+
+            window.draw(gameOverButton);
+
+            window.draw(gameOverButtonText);
         }
 
         window.display();
