@@ -379,6 +379,84 @@ int main()
                 rect.setFillColor(
                     sf::Color(220, 220, 220)
                 );
+                
+                // Цвета плиток
+                if(board[i][j] == 2)
+                {
+                    rect.setFillColor(
+                        sf::Color(238, 228, 218)
+                    );
+                }
+
+                if(board[i][j] == 4)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 224, 200)
+                    );
+                }
+
+                if(board[i][j] == 8)
+                {
+                    rect.setFillColor(
+                        sf::Color(242, 177, 121)
+                    );
+                }
+
+                if(board[i][j] == 16)
+                {
+                    rect.setFillColor(
+                        sf::Color(245, 149, 99)
+                    );
+                }
+
+                if(board[i][j] == 32)
+                {
+                    rect.setFillColor(
+                        sf::Color(246, 124, 95)
+                    );
+                }
+
+                if(board[i][j] == 64)
+                {
+                    rect.setFillColor(
+                        sf::Color(246, 94, 59)
+                    );
+                }
+
+                if(board[i][j] == 128)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 207, 114)
+                    );
+                }
+
+                if(board[i][j] == 256)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 204, 97)
+                    );
+                }
+
+                if(board[i][j] == 512)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 200, 80)
+                    );
+                }
+
+                if(board[i][j] == 1024)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 197, 63)
+                    );
+                }
+
+                if(board[i][j] == 2048)
+                {
+                    rect.setFillColor(
+                        sf::Color(237, 194, 46)
+                    );
+                }
 
                 window.draw(rect);
 
