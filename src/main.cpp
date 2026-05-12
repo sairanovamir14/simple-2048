@@ -13,6 +13,8 @@ int main()
 
     startGame();
 
+    bool gameOver = false;
+
     sf::RenderWindow window(
         sf::VideoMode({420, 560}),
         "2048"
@@ -70,6 +72,21 @@ int main()
         sf::Color::White
     );
 
+    // GAME OVER
+    sf::Text gameOverText(font);
+
+    gameOverText.setString("GAME OVER");
+
+    gameOverText.setCharacterSize(40);
+
+    gameOverText.setFillColor(
+        sf::Color::Red
+    );
+
+    gameOverText.setPosition(
+        sf::Vector2f(70, 70)
+    );
+
     while(window.isOpen())
     {
         while(auto event = window.pollEvent())
@@ -87,25 +104,37 @@ int main()
                 if(key->code ==
                    sf::Keyboard::Key::Left)
                 {
-                    moveLeft();
+                    if(!gameOver)
+                    {
+                        moveLeft();
+                    }
                 }
 
                 if(key->code ==
                    sf::Keyboard::Key::Right)
                 {
-                    moveRight();
+                    if(!gameOver)
+                    {
+                        moveRight();
+                    }
                 }
 
                 if(key->code ==
                    sf::Keyboard::Key::Up)
                 {
-                    moveUp();
+                    if(!gameOver)
+                    {
+                        moveUp();
+                    }
                 }
 
                 if(key->code ==
                    sf::Keyboard::Key::Down)
                 {
-                    moveDown();
+                    if(!gameOver)
+                    {
+                        moveDown();
+                    }
                 }
 
                 // Restart по R
@@ -113,6 +142,14 @@ int main()
                    sf::Keyboard::Key::R)
                 {
                     startGame();
+
+                    gameOver = false;
+                }
+
+                // Проверка проигрыша
+                if(!canMove())
+                {
+                    gameOver = true;
                 }
             }
 
@@ -128,6 +165,8 @@ int main()
                    && my >= 20 && my <= 65)
                 {
                     startGame();
+
+                    gameOver = false;
                 }
             }
         }
@@ -285,6 +324,12 @@ int main()
 
         window.draw(scoreText);
         window.draw(bestText);
+
+        // GAME OVER
+        if(gameOver)
+        {
+            window.draw(gameOverText);
+        }
 
         window.display();
     }

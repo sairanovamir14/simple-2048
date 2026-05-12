@@ -10,9 +10,11 @@ extern int best;
 // game.cpp
 void addNumber();
 void startGame();
+bool canMove();
 
 // moves.cpp
 void moveLeft();
 void moveRight();
 void moveUp();
 void moveDown();
+
