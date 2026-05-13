@@ -16,8 +16,8 @@ int main()
     bool gameOver = false;
 
     sf::RenderWindow window(
-        sf::VideoMode({420, 560}),
-        "2048"
+        sf::VideoMode({850, 550}),
+        "2048 Visual C++"
     );
 
     sf::Font font;
@@ -27,58 +27,99 @@ int main()
         return 0;
     }
 
-    // MAIN RESTART BUTTON
-    sf::RectangleShape button(
-        sf::Vector2f(140, 45)
+    // TITLE
+    sf::Text title(font);
+
+    title.setString("2048");
+
+    title.setCharacterSize(80);
+
+    title.setFillColor(
+        sf::Color(120, 110, 100)
     );
 
-    button.setPosition(
-        sf::Vector2f(140, 500)
+    title.setPosition(
+        sf::Vector2f(560, 120)
     );
 
-    button.setFillColor(
-        sf::Color(130, 130, 130)
+    // SCORE BOX
+    sf::RectangleShape scoreBox(
+        sf::Vector2f(280, 90)
     );
 
-    sf::Text buttonText(font);
+    scoreBox.setPosition(
+        sf::Vector2f(500, 250)
+    );
 
-    buttonText.setString("RESTART");
+    scoreBox.setFillColor(
+        sf::Color(190, 180, 170)
+    );
 
-    buttonText.setCharacterSize(24);
+    // SCORE LABEL
+    sf::Text scoreLabel(font);
 
-    buttonText.setFillColor(
+    scoreLabel.setString("SCORE");
+
+    scoreLabel.setCharacterSize(24);
+
+    scoreLabel.setFillColor(
         sf::Color::White
     );
 
-    buttonText.setPosition(
-        sf::Vector2f(155, 505)
+    scoreLabel.setPosition(
+        sf::Vector2f(610, 260)
     );
 
-    // SCORE
-    sf::Text scoreText(font);
+    // SCORE NUMBER
+    sf::Text scoreNumber(font);
 
-    scoreText.setCharacterSize(26);
+    scoreNumber.setCharacterSize(40);
 
-    scoreText.setFillColor(
+    scoreNumber.setFillColor(
         sf::Color::White
     );
 
-    // BEST
-    sf::Text bestText(font);
+    // CONTROLS
+    sf::Text controls(font);
 
-    bestText.setCharacterSize(22);
+    controls.setString(
+        "Use arrows or WASD"
+    );
 
-    bestText.setFillColor(
-        sf::Color::White
+    controls.setCharacterSize(28);
+
+    controls.setFillColor(
+        sf::Color(120, 110, 100)
+    );
+
+    controls.setPosition(
+        sf::Vector2f(520, 390)
+    );
+
+    // RESTART INFO
+    sf::Text restartInfo(font);
+
+    restartInfo.setString(
+        "R restart   Esc quit"
+    );
+
+    restartInfo.setCharacterSize(22);
+
+    restartInfo.setFillColor(
+        sf::Color(160, 150, 140)
+    );
+
+    restartInfo.setPosition(
+        sf::Vector2f(560, 450)
     );
 
     // GAME OVER PANEL
     sf::RectangleShape gameOverPanel(
-        sf::Vector2f(260, 120)
+        sf::Vector2f(300, 150)
     );
 
     gameOverPanel.setPosition(
-        sf::Vector2f(80, 210)
+        sf::Vector2f(270, 180)
     );
 
     gameOverPanel.setFillColor(
@@ -98,30 +139,29 @@ int main()
         "GAME OVER"
     );
 
-    gameOverText.setCharacterSize(36);
+    gameOverText.setCharacterSize(40);
 
     gameOverText.setFillColor(
         sf::Color(150, 20, 20)
     );
 
-    // CENTER GAME OVER TEXT
     sf::FloatRect gameBounds =
         gameOverText.getLocalBounds();
 
     gameOverText.setPosition(
         sf::Vector2f(
-            210 - gameBounds.size.x / 2,
-            225
+            425 - gameBounds.size.x / 2,
+            205
         )
     );
 
     // GAME OVER BUTTON
     sf::RectangleShape gameOverButton(
-        sf::Vector2f(160, 45)
+        sf::Vector2f(170, 50)
     );
 
     gameOverButton.setPosition(
-        sf::Vector2f(130, 275)
+        sf::Vector2f(340, 260)
     );
 
     gameOverButton.setFillColor(
@@ -142,7 +182,7 @@ int main()
     );
 
     gameOverButtonText.setPosition(
-        sf::Vector2f(155, 280)
+        sf::Vector2f(360, 268)
     );
 
     while(window.isOpen())
@@ -159,34 +199,48 @@ int main()
             if(const auto* key =
                event->getIf<sf::Event::KeyPressed>())
             {
+                if(key->code ==
+                   sf::Keyboard::Key::Escape)
+                {
+                    window.close();
+                }
+
                 if(!gameOver)
                 {
                     if(key->code ==
-                       sf::Keyboard::Key::Left)
+                       sf::Keyboard::Key::Left
+                       || key->code ==
+                       sf::Keyboard::Key::A)
                     {
                         moveLeft();
                     }
 
                     if(key->code ==
-                       sf::Keyboard::Key::Right)
+                       sf::Keyboard::Key::Right
+                       || key->code ==
+                       sf::Keyboard::Key::D)
                     {
                         moveRight();
                     }
 
                     if(key->code ==
-                       sf::Keyboard::Key::Up)
+                       sf::Keyboard::Key::Up
+                       || key->code ==
+                       sf::Keyboard::Key::W)
                     {
                         moveUp();
                     }
 
                     if(key->code ==
-                       sf::Keyboard::Key::Down)
+                       sf::Keyboard::Key::Down
+                       || key->code ==
+                       sf::Keyboard::Key::S)
                     {
                         moveDown();
                     }
                 }
 
-                // RESTART WITH R
+                // RESTART
                 if(key->code ==
                    sf::Keyboard::Key::R)
                 {
@@ -210,20 +264,11 @@ int main()
                 int mx = mouse->position.x;
                 int my = mouse->position.y;
 
-                // MAIN BUTTON
-                if(mx >= 140 && mx <= 280
-                   && my >= 500 && my <= 545)
-                {
-                    startGame();
-
-                    gameOver = false;
-                }
-
                 // GAME OVER BUTTON
                 if(gameOver)
                 {
-                    if(mx >= 130 && mx <= 290
-                       && my >= 275 && my <= 320)
+                    if(mx >= 340 && mx <= 510
+                       && my >= 260 && my <= 310)
                     {
                         startGame();
 
@@ -233,26 +278,24 @@ int main()
             }
         }
 
-        // SCORE
-        scoreText.setString(
-            "SCORE: " + to_string(score)
+        // SCORE UPDATE
+        scoreNumber.setString(
+            to_string(score)
         );
 
-        bestText.setString(
-            "BEST: " + to_string(best)
-        );
+        sf::FloatRect scoreBounds =
+            scoreNumber.getLocalBounds();
 
-        scoreText.setPosition(
-            sf::Vector2f(140, 20)
-        );
-
-        bestText.setPosition(
-            sf::Vector2f(165, 55)
+        scoreNumber.setPosition(
+            sf::Vector2f(
+                640 - scoreBounds.size.x / 2,
+                290
+            )
         );
 
         // BACKGROUND
         window.clear(
-            sf::Color(190, 180, 170)
+            sf::Color(250, 248, 239)
         );
 
         // BOARD
@@ -261,18 +304,18 @@ int main()
             for(int j = 0; j < SIZE; j++)
             {
                 sf::RectangleShape rect(
-                    sf::Vector2f(80, 80)
+                    sf::Vector2f(90, 90)
                 );
 
                 rect.setPosition(
                     sf::Vector2f(
-                        35 + j * 90,
-                        120 + i * 90
+                        40 + j * 100,
+                        70 + i * 100
                     )
                 );
 
                 rect.setFillColor(
-                    sf::Color(205, 205, 205)
+                    sf::Color(205, 193, 180)
                 );
 
                 // TILE COLORS
@@ -364,7 +407,7 @@ int main()
                         to_string(board[i][j])
                     );
 
-                    text.setCharacterSize(30);
+                    text.setCharacterSize(36);
 
                     if(board[i][j] >= 8)
                     {
@@ -375,20 +418,19 @@ int main()
                     else
                     {
                         text.setFillColor(
-                            sf::Color::Black
+                            sf::Color(120,110,100)
                         );
                     }
 
-                    // CENTER TEXT
                     sf::FloatRect bounds =
                         text.getLocalBounds();
 
                     text.setPosition(
                         sf::Vector2f(
-                            35 + j * 90 +
-                            40 - bounds.size.x / 2,
+                            40 + j * 100 +
+                            45 - bounds.size.x / 2,
 
-                            120 + i * 90 +
+                            70 + i * 100 +
                             18
                         )
                     );
@@ -399,11 +441,17 @@ int main()
         }
 
         // DRAW UI
-        window.draw(button);
-        window.draw(buttonText);
+        window.draw(title);
 
-        window.draw(scoreText);
-        window.draw(bestText);
+        window.draw(scoreBox);
+
+        window.draw(scoreLabel);
+
+        window.draw(scoreNumber);
+
+        window.draw(controls);
+
+        window.draw(restartInfo);
 
         // GAME OVER WINDOW
         if(gameOver)
